@@ -1,7 +1,7 @@
 {
   "name": "curl",
   "version": "1.0.0",
-  "description": "github action for CURL",
+  "description": "cURL for Github Actions",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
@@ -10,21 +10,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agoda-com/curl.git"
+    "url": "git+https://github.com/prasiman/curl.git"
   },
   "keywords": [
     "github-action-curl"
   ],
-  "author": "agoda",
+  "author": "prasiman",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/agoda-com/curl/issues"
+    "url": "https://github.com/prasiman/curl/issues"
   },
-  "homepage": "https://github.com/agoda-com/curl#readme",
+  "homepage": "https://github.com/prasiman/curl#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@types/js-yaml": "^4.0.5",
-    "axios": "^0.26.1",
+    "axios": "^1.6.0",
     "axios-retry": "^3.2.4",
     "fs": "0.0.1-security",
     "js-yaml": "^4.1.0",
@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
-    "typescript": "^3.7.7"
+    "typescript": "^4.9.4"
   }
 }

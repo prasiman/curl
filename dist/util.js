@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -14,7 +18,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -33,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -65,7 +69,7 @@ var axios_1 = __importDefault(require("axios"));
 var output_1 = __importDefault(require("./output"));
 var rax = __importStar(require("retry-axios"));
 var yaml = __importStar(require("js-yaml"));
-exports.getAcceptedStatusCodes = function () {
+var getAcceptedStatusCodes = function () {
     var acceptedStatusCodes = requestconf_1.INPUT_ACCEPT
         .split(",")
         .filter(function (x) { return x !== ""; })
@@ -74,20 +78,22 @@ exports.getAcceptedStatusCodes = function () {
     for (var _i = 0, acceptedStatusCodes_1 = acceptedStatusCodes; _i < acceptedStatusCodes_1.length; _i++) {
         var acceptedStatusCode = acceptedStatusCodes_1[_i];
         if (isNaN(Number(acceptedStatusCode))) {
-            throw new Error("Accept status " + acceptedStatusCode + " is invalid");
+            throw new Error("Accept status ".concat(acceptedStatusCode, " is invalid"));
         }
         output.push(Number(acceptedStatusCode));
     }
     return output;
 };
-exports.buildOutput = function (res) {
+exports.getAcceptedStatusCodes = getAcceptedStatusCodes;
+var buildOutput = function (res) {
     return JSON.stringify({
         status_code: res.status,
         data: res.data,
         headers: res.headers,
     });
 };
-exports.tryToParseJson = function (data) {
+exports.buildOutput = buildOutput;
+var tryToParseJson = function (data) {
     var output = data;
     // try to parse json directly
     try {
@@ -107,7 +113,8 @@ exports.tryToParseJson = function (data) {
     }
     return data;
 };
-exports.sendRequestWithRetry = function (config) { return __awaiter(void 0, void 0, void 0, function () {
+exports.tryToParseJson = tryToParseJson;
+var sendRequestWithRetry = function (config) { return __awaiter(void 0, void 0, void 0, function () {
     var client;
     var _a;
     return __generator(this, function (_b) {
@@ -122,16 +129,17 @@ exports.sendRequestWithRetry = function (config) { return __awaiter(void 0, void
                 httpMethodsToRetry: [(_a = config.method) !== null && _a !== void 0 ? _a : ''],
                 onRetryAttempt: function (err) {
                     var cfg = rax.getConfig(err);
-                    core.info("Retry attempt #" + (cfg === null || cfg === void 0 ? void 0 : cfg.currentRetryAttempt));
+                    core.info("Retry attempt #".concat(cfg === null || cfg === void 0 ? void 0 : cfg.currentRetryAttempt));
                 },
             };
             rax.attach(client);
         }
         client
             .request(config)
-            .then(function (resp) { return output_1.default(resp); })
+            .then(function (resp) { return (0, output_1.default)(resp); })
             .catch(function (err) { return core.setFailed(err); });
         return [2 /*return*/];
     });
 }); };
+exports.sendRequestWithRetry = sendRequestWithRetry;
 //# sourceMappingURL=util.js.map

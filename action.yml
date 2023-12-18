@@ -15,22 +15,25 @@ inputs:
     description: 'Params object'
   body:
     description: 'Body object'
+  send-raw-body:
+    description: 'Send raw body instead of JSON-parsed or YAML-parsed body'
+    default: 'false'
   timeout:
     description: 'timeout (millisec)'
     default: 1000
   basic-auth-token:
-    description: 'Basic authentication token, format =>  username:password as base64'
+    description: 'Basic authentication token, format => username:password as base64'
   bearer-token: 
     description: 'Bearer Token'
   proxy-url:
-    description: 'Proxy host, format =>  host:port'
+    description: 'Proxy host, format => host:port'
   proxy-auth-token: 
     description: 'Proxy authentication token, format =>  username:password as base64'
   log-response: 
     description: 'Should log the response'
     default: 'false'
   retries:
-    description: 'retries number'
+    description: 'Number of retries'
     default: 1
   custom-config:
     description: custom config

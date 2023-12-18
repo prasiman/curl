@@ -7,7 +7,6 @@ import {
   AxiosProxyConfig,
   AxiosRequestHeaders,
 } from "axios";
-import * as yaml from "js-yaml";
 
 // builder for request config
 
@@ -25,13 +24,12 @@ export const INPUT_URL: Readonly<string> = core.getInput("url", {
 export const INPUT_HEADERS: Readonly<string> = core.getInput("headers");
 export const INPUT_PARAMS: Readonly<string> = core.getInput("params");
 export const INPUT_BODY: Readonly<string> = core.getInput("body");
+export const INPUT_SEND_RAW_BODY: Readonly<boolean> = core.getBooleanInput("send-raw-body");
 export const INPUT_METHOD: Readonly<Method> = core.getInput("method") as Method;
 export const INPUT_TIMEOUT: Readonly<string> = core.getInput("timeout");
 export const INPUT_ACCEPT: Readonly<string> = core.getInput("accept");
-export const INPUT_LOG_RESPONSE: Readonly<boolean> =
-  core.getBooleanInput("log-response");
-export const INPUT_CUSTOM_CONFIG_FILE: Readonly<string> =
-  core.getInput("custom-config");
+export const INPUT_LOG_RESPONSE: Readonly<boolean> = core.getBooleanInput("log-response");
+export const INPUT_CUSTOM_CONFIG_FILE: Readonly<string> = core.getInput("custom-config");
 export const INPUT_RETRIES: Readonly<string> = core.getInput("retries");
 
 const builder = {
@@ -123,7 +121,7 @@ if (INPUT_PARAMS) {
 }
 
 if (INPUT_BODY) {
-  config.data = tryToParseJson(INPUT_BODY);
+  config.data = INPUT_SEND_RAW_BODY ? INPUT_BODY : tryToParseJson(INPUT_BODY);
 }
 
 if (INPUT_BEARER_TOKEN) {

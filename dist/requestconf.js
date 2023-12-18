@@ -12,7 +12,11 @@ var __assign = (this && this.__assign) || function () {
 };
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -25,12 +29,12 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.INPUT_RETRIES = exports.INPUT_CUSTOM_CONFIG_FILE = exports.INPUT_LOG_RESPONSE = exports.INPUT_ACCEPT = exports.INPUT_TIMEOUT = exports.INPUT_METHOD = exports.INPUT_BODY = exports.INPUT_PARAMS = exports.INPUT_HEADERS = exports.INPUT_URL = exports.INPUT_PROXY_AUTH_TOKEN = exports.INPUT_PROXY_URL = exports.INPUT_BEARER_TOKEN = exports.INPUT_BASIC_AUTH_TOKEN = void 0;
+exports.INPUT_RETRIES = exports.INPUT_CUSTOM_CONFIG_FILE = exports.INPUT_LOG_RESPONSE = exports.INPUT_ACCEPT = exports.INPUT_TIMEOUT = exports.INPUT_METHOD = exports.INPUT_SEND_RAW_BODY = exports.INPUT_BODY = exports.INPUT_PARAMS = exports.INPUT_HEADERS = exports.INPUT_URL = exports.INPUT_PROXY_AUTH_TOKEN = exports.INPUT_PROXY_URL = exports.INPUT_BEARER_TOKEN = exports.INPUT_BASIC_AUTH_TOKEN = void 0;
 var util_1 = require("./util");
 var core = __importStar(require("@actions/core"));
 // builder for request config
@@ -45,6 +49,7 @@ exports.INPUT_URL = core.getInput("url", {
 exports.INPUT_HEADERS = core.getInput("headers");
 exports.INPUT_PARAMS = core.getInput("params");
 exports.INPUT_BODY = core.getInput("body");
+exports.INPUT_SEND_RAW_BODY = core.getBooleanInput("send-raw-body");
 exports.INPUT_METHOD = core.getInput("method");
 exports.INPUT_TIMEOUT = core.getInput("timeout");
 exports.INPUT_ACCEPT = core.getInput("accept");
@@ -64,7 +69,7 @@ var builder = {
         };
     },
     bearerToken: function () {
-        return "Bearer " + exports.INPUT_BEARER_TOKEN;
+        return "Bearer ".concat(exports.INPUT_BEARER_TOKEN);
     },
     proxy: function () {
         var proxy;
@@ -115,13 +120,13 @@ if (exports.INPUT_BASIC_AUTH_TOKEN) {
     config.auth = builder.basicAuth();
 }
 if (exports.INPUT_HEADERS) {
-    config.headers = util_1.tryToParseJson(exports.INPUT_HEADERS);
+    config.headers = (0, util_1.tryToParseJson)(exports.INPUT_HEADERS);
 }
 if (exports.INPUT_PARAMS) {
-    config.params = util_1.tryToParseJson(exports.INPUT_PARAMS);
+    config.params = (0, util_1.tryToParseJson)(exports.INPUT_PARAMS);
 }
 if (exports.INPUT_BODY) {
-    config.data = util_1.tryToParseJson(exports.INPUT_BODY);
+    config.data = exports.INPUT_SEND_RAW_BODY ? exports.INPUT_BODY : (0, util_1.tryToParseJson)(exports.INPUT_BODY);
 }
 if (exports.INPUT_BEARER_TOKEN) {
     config.headers = __assign(__assign({}, config.headers), { Authorization: builder.bearerToken() });
@@ -130,7 +135,7 @@ if (exports.INPUT_PROXY_URL) {
     config.proxy = builder.proxy();
 }
 if (exports.INPUT_ACCEPT) {
-    var accepts_1 = util_1.getAcceptedStatusCodes();
+    var accepts_1 = (0, util_1.getAcceptedStatusCodes)();
     config.validateStatus = function (status) { return accepts_1.includes(status); };
 }
 exports.default = config;
