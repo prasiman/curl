@@ -40,6 +40,10 @@ jobs:
           # Apply only to POST|PUT request
           body: '{ "name": "breeze",  "job": "devops" }'
 
+          # Send raw body instead of JSON-parsed or YAML-parsed body
+          # Default: false
+          send-raw-body: false
+
           # Request timeout (millisec)
           # Default: 1000
           timeout: 1000
@@ -107,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Call API 1"
-        uses: indiesdev/curl@v1.1
+        uses: prasiman/curl@v1.2
         id: api
         with:
           url: https://reqres.in/api/users
@@ -116,18 +120,29 @@ jobs:
           body: '{ "name": "breeze", "job": "devops" }'
           log-response: true
       - name: "Call API 2"
-        uses: indiesdev/curl@v1.1
+        uses: prasiman/curl@v1.2
         id: api2
         with:
           url: https://reqres.in/api/users
           method: "POST"
           accept: 201
-          # you can use multiline format to construct json data object, the content should be yml format.
-          # this format apply to inputs: body, headers and params
+          # You can use multiline format to construct json data object, the content should be yml format.
+          # This format apply to inputs: body, headers and params
           body: |
             name: breeze
             job: devops
           log-response: true
+      - name: "Call API 3"
+        uses: prasiman/curl@v1.2
+        id: api3
+        with:
+          url: https://reqres.in/api/users
+          method: "POST"
+          accept: 201
+          # You can send raw body instead of JSON-parsed or YAML-parsed body
+          body: '"string"'
+          send-raw-body: true
+          log-response: true
       - name: "Use response"
-        run: echo ${{ steps.api.outputs.response }}
+        run: echo ${{ steps.api2.outputs.response }}
 ```

@@ -15,7 +15,7 @@ try {
     }
     if (!fs.existsSync(path)) {
       throw new Error(
-        "Config file not found, meybe you need to use action/checkout before this step or there is typo on file name"
+        "Config file not found, maybe you need to use action/checkout before this step or there is typo on file name"
       );
     }
     const customConfig: AxiosRequestConfig = JSON.parse(
